@@ -1,0 +1,24 @@
+{# PLACEHOLDER — real banner, nav, and social logos land in Phase 3. #}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ band.name }}{% endblock %}</title>
+</head>
+<body>
+  <header>
+    <a href="{{ url_for('main.index') }}">{{ band.name }}</a>
+    <nav>
+      <a href="{{ url_for('main.members') }}">Meet the Members</a>
+      <a href="{{ url_for('main.videos') }}">Videos</a>
+      <a href="{{ url_for('main.shows') }}">Upcoming Shows</a>
+      <a href="{{ url_for('main.book') }}">Book Us</a>
+      <a href="{{ links.instagram }}" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="{{ links.facebook }}" target="_blank" rel="noopener noreferrer">Facebook</a>
+    </nav>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>&copy; {{ band.name }}</footer>
+</body>
+</html>

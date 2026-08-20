@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Upcoming Shows — {{ band.name }}{% endblock %}
+{% block content %}
+  <h1>Upcoming Shows</h1>
+  {% for show in upcoming_shows %}
+    <p>{{ show.date }} — {{ show.venue }}, {{ show.city }} at {{ show.time }}</p>
+  {% else %}
+    <p>No shows currently scheduled.</p>
+  {% endfor %}
+
+  <h2>Past Shows</h2>
+  {% for show in past_shows %}
+    <p>{{ show.date }} — {{ show.venue }}, {{ show.city }}</p>
+  {% endfor %}
+{% endblock %}

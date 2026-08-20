@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Book Us — {{ band.name }}{% endblock %}
+{% block content %}
+  <h1>Book Us</h1>
+  <form method="post" action="{{ url_for('main.contact') }}">
+    <input name="name" placeholder="Name" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="event_date" placeholder="Event date">
+    <input name="event_type" placeholder="Event type">
+    <input name="venue" placeholder="Venue">
+    <input name="budget" placeholder="Budget">
+    <textarea name="message" placeholder="Tell us about your event" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+{% endblock %}
