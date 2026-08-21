@@ -1,0 +1,27 @@
+{# Silent looping background clip — GIF-like, at a fraction of the bandwidth.
+   Falls back to the gradient in .hero until hero.mp4 is dropped in (Phase 5). #}
+{% set has_video = asset_exists('hero.mp4') or asset_exists('hero.webm') %}
+<section class="hero">
+  {% if has_video %}
+    <video class="hero__video" muted autoplay loop playsinline preload="metadata"
+           {% if asset_exists('hero.jpg') %}poster="{{ url_for('static', filename='assets/hero.jpg') }}"{% endif %}>
+      {% if asset_exists('hero.webm') %}
+        <source src="{{ url_for('static', filename='assets/hero.webm') }}" type="video/webm">
+      {% endif %}
+      {% if asset_exists('hero.mp4') %}
+        <source src="{{ url_for('static', filename='assets/hero.mp4') }}" type="video/mp4">
+      {% endif %}
+    </video>
+  {% endif %}
+  <div class="hero__scrim"></div>
+
+  <div class="wrap hero__content">
+    <p class="hero__tagline">{{ band.tagline }}</p>
+    <h1 class="hero__title">{{ band.hero_heading }}</h1>
+    <p class="hero__sub">{{ band.hero_subheading }}</p>
+    <div class="hero__actions">
+      <a class="btn" href="{{ url_for('main.book') }}">Book Us</a>
+      <a class="btn btn--ghost" href="{{ url_for('main.videos') }}">Watch Us Play</a>
+    </div>
+  </div>
+</section>

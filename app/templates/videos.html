@@ -1,8 +1,32 @@
 {% extends "base.html" %}
 {% block title %}Videos — {{ band.name }}{% endblock %}
+{% block description %}Watch {{ band.name }} play live.{% endblock %}
 {% block content %}
-  <h1>Videos</h1>
-  {% for v in videos %}
-    <h2>{{ v.title }}</h2><p>{{ v.description }}</p><p>{{ v.youtube_id }}</p>
-  {% endfor %}
+<section class="section">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">See and hear us</p>
+      <h2>Videos</h2>
+    </div>
+    <div class="grid grid--3">
+      {% for video in videos %}
+        <article>
+          <div class="video__frame">
+            {# nocookie host + lazy loading: no YouTube cookies or network cost
+               until the visitor scrolls the video into view. #}
+            <iframe loading="lazy"
+                    src="https://www.youtube-nocookie.com/embed/{{ video.youtube_id }}"
+                    title="{{ video.title }}"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </div>
+          <h3 class="video__title">{{ video.title }}</h3>
+          <p class="video__desc">{{ video.description }}</p>
+        </article>
+      {% else %}
+        <div class="empty"><p>Videos coming soon.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 {% endblock %}

@@ -8,12 +8,15 @@ class Config:
     MAIL_RECIPIENT = os.environ.get("MAIL_RECIPIENT", "noah.hansen1323@gmail.com")
     MAIL_FROM = os.environ.get("MAIL_FROM", "onboarding@resend.dev")
 
-    # Cache static files for 1 year (browsers won't re-fetch)
+    # Cache static files for 1 year. Safe because every static URL carries a
+    # ?v=<mtime> stamp (see create_app), so editing a file changes its URL.
     SEND_FILE_MAX_AGE_DEFAULT = 31536000
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    # Don't cache locally, so CSS edits show up on reload.
+    SEND_FILE_MAX_AGE_DEFAULT = 0
 
 
 class ProductionConfig(Config):

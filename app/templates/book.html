@@ -1,15 +1,71 @@
 {% extends "base.html" %}
 {% block title %}Book Us — {{ band.name }}{% endblock %}
+{% block description %}Check availability and request a quote from {{ band.name }}.{% endblock %}
 {% block content %}
-  <h1>Book Us</h1>
-  <form method="post" action="{{ url_for('main.contact') }}">
-    <input name="name" placeholder="Name" required>
-    <input name="email" type="email" placeholder="Email" required>
-    <input name="event_date" placeholder="Event date">
-    <input name="event_type" placeholder="Event type">
-    <input name="venue" placeholder="Venue">
-    <input name="budget" placeholder="Budget">
-    <textarea name="message" placeholder="Tell us about your event" required></textarea>
-    <button type="submit">Send</button>
-  </form>
+<section class="section">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">Availability &amp; pricing</p>
+      <h2>Book Us</h2>
+      <p class="contact__aside">{{ band.contact.blurb }}</p>
+      <p class="contact__aside">
+        Prefer email? <a href="mailto:{{ links.email }}">{{ links.email }}</a>
+        {% if links.phone %}<br>Or call {{ links.phone }}.{% endif %}
+      </p>
+    </div>
+
+    <form class="form" data-async-form action="{{ url_for('main.contact') }}" method="post">
+      <input type="hidden" name="source" value="book">
+      <div class="form__row">
+        <div class="field">
+          <label class="field__label" for="book-name">Name</label>
+          <input id="book-name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label class="field__label" for="book-email">Email</label>
+          <input id="book-email" name="email" type="email" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="field field--optional">
+          <label class="field__label" for="book-event-date">Event date</label>
+          <input id="book-event-date" name="event_date" type="date">
+        </div>
+        <div class="field field--optional">
+          <label class="field__label" for="book-event-type">Event type</label>
+          <select id="book-event-type" name="event_type">
+            <option value="">Select one</option>
+            {% for service in services %}
+              <option value="{{ service.name }}">{{ service.name }}</option>
+            {% endfor %}
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="field field--optional">
+          <label class="field__label" for="book-venue">Venue or location</label>
+          <input id="book-venue" name="venue" type="text">
+        </div>
+        <div class="field field--optional">
+          <label class="field__label" for="book-budget">Budget</label>
+          <input id="book-budget" name="budget" type="text" placeholder="e.g. $2,000-3,000">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="book-message">Tell us about your event</label>
+        <textarea id="book-message" name="message" required
+                  placeholder="Guest count, timeline, the kind of music you have in mind…"></textarea>
+      </div>
+
+      <div>
+        <button class="btn" type="submit">Send Booking Request</button>
+      </div>
+      <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
 {% endblock %}

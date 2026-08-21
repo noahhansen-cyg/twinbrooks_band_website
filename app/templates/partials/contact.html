@@ -1,0 +1,35 @@
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">Say hello</p>
+      <h2>{{ band.contact.heading }}</h2>
+      <p class="contact__aside">{{ band.contact.blurb }}</p>
+      <p class="contact__aside">
+        Prefer email? <a href="mailto:{{ links.email }}">{{ links.email }}</a>
+        {% if links.phone %}<br>Or call {{ links.phone }}.{% endif %}
+      </p>
+    </div>
+
+    <form class="form" data-async-form action="{{ url_for('main.contact') }}" method="post">
+      <input type="hidden" name="source" value="index">
+      <div class="form__row">
+        <div class="field">
+          <label class="field__label" for="contact-name">Name</label>
+          <input id="contact-name" name="name" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label class="field__label" for="contact-email">Email</label>
+          <input id="contact-email" name="email" type="email" required autocomplete="email">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label" for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" required></textarea>
+      </div>
+      <div>
+        <button class="btn" type="submit">Send Message</button>
+      </div>
+      <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>

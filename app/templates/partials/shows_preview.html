@@ -1,0 +1,19 @@
+<section class="section section--alt" id="shows">
+  <div class="wrap">
+    <p class="section__eyebrow">On the calendar</p>
+    <h2>Upcoming Shows</h2>
+    {% for show in upcoming_shows %}
+      {% include "partials/show_card.html" %}
+    {% else %}
+      <div class="empty">
+        <p>No public shows on the books right now.</p>
+        <a class="btn btn--sm" href="{{ url_for('main.book') }}">Book us for your event</a>
+      </div>
+    {% endfor %}
+    {% if upcoming_shows %}
+      <p style="margin-top:1.5rem">
+        <a class="btn btn--ghost btn--sm" href="{{ url_for('main.shows') }}">See all shows</a>
+      </p>
+    {% endif %}
+  </div>
+</section>

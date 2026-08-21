@@ -1,9 +1,12 @@
+import os
 import re
 import threading
 from datetime import date
 
 import resend
-from flask import Blueprint, current_app, jsonify, render_template, request
+from flask import (
+    Blueprint, current_app, flash, jsonify, redirect, render_template, request, url_for
+)
 
 main = Blueprint("main", __name__)
 
@@ -11,6 +14,13 @@ _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 # Named so tests can wait on the fire-and-forget send deterministically.
 EMAIL_THREAD_NAME = "contact-email"
+
+# Which page a submission came from, so a no-JS visitor is sent back to it.
+# A fixed map rather than the Referer header — no open redirect.
+_FORM_SOURCES = {
+    "index": ("main.index", "#contact"),
+    "book": ("main.book", ""),
+}
 
 # Extra fields the Book Us form sends. Absent on the homepage contact form.
 _BOOKING_FIELDS = (
@@ -54,6 +64,19 @@ def build_email(form):
     return subject, "\n".join(lines)
 
 
+def asset_exists(relpath):
+    """True when a file exists under static/assets.
+
+    Photos and the hero clip arrive with real content (Phase 5). Until then the
+    templates fall back to a designed placeholder instead of a broken image, and
+    upgrade on their own the moment a file is dropped in.
+    """
+    if not relpath:
+        return False
+    full = os.path.join(current_app.static_folder, "assets", relpath)
+    return os.path.isfile(full)
+
+
 def _site_data():
     return current_app.config["SITE_DATA"]
 
@@ -89,15 +112,32 @@ def book():
 
 @main.route("/contact", methods=["POST"])
 def contact():
+    """Serves both the homepage contact form and the Book Us form.
+
+    Answers JSON to the fetch() submit in main.js, and falls back to a
+    flash-and-redirect for visitors without JavaScript.
+    """
+    wants_json = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+
+    def respond(message, category, status):
+        if wants_json:
+            key = "success" if category == "success" else "error"
+            return jsonify({key: True if key == "success" else message}), status
+        flash(message, category)
+        endpoint, anchor = _FORM_SOURCES.get(
+            request.form.get("source", ""), _FORM_SOURCES["index"]
+        )
+        return redirect(url_for(endpoint) + anchor, code=303)
+
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
     message = request.form.get("message", "").strip()
 
     if not name or not email or not message:
-        return jsonify({"error": "Name, email, and message are all required."}), 400
+        return respond("Name, email, and message are all required.", "error", 400)
 
     if not _EMAIL_RE.match(email):
-        return jsonify({"error": "Please enter a valid email address."}), 400
+        return respond("Please enter a valid email address.", "error", 400)
 
     subject, body = build_email(request.form)
 
@@ -122,7 +162,7 @@ def contact():
     else:
         current_app.logger.info("[DEV] %s\n%s", subject, body)
 
-    return jsonify({"success": True})
+    return respond("Thanks — we got your message and will be in touch soon.", "success", 200)
 
 
 @main.route("/health")

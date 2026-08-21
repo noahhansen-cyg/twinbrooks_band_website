@@ -1,7 +1,7 @@
 """The Book Us form posts to the same /contact endpoint with extra fields."""
 from unittest.mock import patch
 
-from tests.test_contact import join_email_thread
+from tests.test_contact import AJAX, join_email_thread
 
 BOOKING = {
     "name": "Dana Reed",
@@ -70,7 +70,7 @@ def test_booking_fields_are_trimmed():
 
 def test_booking_post_reaches_the_email(mail_client):
     with patch("app.routes.resend.Emails.send") as send:
-        resp = mail_client.post("/contact", data=BOOKING)
+        resp = mail_client.post("/contact", data=BOOKING, headers=AJAX)
         join_email_thread()
     assert resp.status_code == 200
     payload = send.call_args[0][0]
@@ -80,5 +80,5 @@ def test_booking_post_reaches_the_email(mail_client):
 
 
 def test_booking_still_requires_the_core_fields(client):
-    resp = client.post("/contact", data={**BOOKING, "message": ""})
+    resp = client.post("/contact", data={**BOOKING, "message": ""}, headers=AJAX)
     assert resp.status_code == 400

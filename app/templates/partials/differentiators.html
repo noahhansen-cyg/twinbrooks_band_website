@@ -1,0 +1,17 @@
+<section class="section" id="what-sets-us-apart">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">Why us</p>
+      <h2>What Sets Us Apart</h2>
+    </div>
+    <div class="grid grid--2">
+      {% for item in differentiators %}
+        <div class="card">
+          <div class="card__num">{{ '%02d' % loop.index }}</div>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

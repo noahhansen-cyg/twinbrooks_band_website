@@ -1,24 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>{{ band.hero_heading }}</h1>
-  <p>{{ band.hero_subheading }}</p>
-
-  <h2>{{ band.who_we_are.heading }}</h2>
-  {% for p in band.who_we_are.paragraphs %}<p>{{ p }}</p>{% endfor %}
-
-  <h2>Upcoming Shows</h2>
-  {% for show in upcoming_shows %}
-    <p>{{ show.date }} — {{ show.venue }}, {{ show.city }}</p>
-  {% else %}
-    <p>No shows currently scheduled.</p>
-  {% endfor %}
-
-  <h2>What Sets Us Apart</h2>
-  {% for item in differentiators %}<h3>{{ item.title }}</h3><p>{{ item.description }}</p>{% endfor %}
-
-  <h2>Our Services</h2>
-  {% for item in services %}<h3>{{ item.name }}</h3><p>{{ item.description }}</p>{% endfor %}
-
-  <h2>{{ band.contact.heading }}</h2>
-  <p>{{ band.contact.blurb }}</p>
+  {% include "partials/hero.html" %}
+  {% include "partials/who_we_are.html" %}
+  {% include "partials/shows_preview.html" %}
+  {% include "partials/differentiators.html" %}
+  {% include "partials/services.html" %}
+  {% include "partials/contact.html" %}
 {% endblock %}
