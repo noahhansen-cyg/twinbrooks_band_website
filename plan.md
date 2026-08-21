@@ -60,7 +60,8 @@ tests/
 `make test` must be green before Phase 1 is done. The coverage gate switches on at the end
 of this phase, once there's real code to measure.
 
-Then create the `dev` branch and enable branch protection on `main` requiring the CI check.
+Then create the `dev` branch. (Branch protection moved to Phase 4 — requiring a status
+check that does not exist yet would block every merge.)
 
 ## Phase 2 — App core
 
@@ -162,8 +163,14 @@ homepage section heading, and a show card per upcoming show.
 ## Phase 4 — CI/CD
 
 `.github/workflows/ci.yml` — on `pull_request` to `[main, dev]`: checkout →
-setup-python 3.12 (pip cache) → `pip install -r requirements-dev.txt` →
-`flake8 app/ tests/ --max-line-length=100` → `pytest tests/`.
+setup-python (pip cache) → `pip install -r requirements-dev.txt` →
+`flake8 app/ tests/ --max-line-length=100` → `pytest`.
+
+Runs as a matrix over Python 3.10 and 3.12 — the version the site is developed on and the
+one Render runs — which settles the version-drift open item without forcing a choice.
+
+Branch protection on `main` lands here, once CI has reported once and the check names are
+known: require a pull request and both CI legs passing.
 
 Because tests were written alongside each phase, the first CI run is a confirmation rather
 than a discovery — the suite is already green locally.
@@ -192,9 +199,6 @@ values, swapping placeholders for real content is checked automatically. Needed:
 ---
 
 ## Open items
-
-**Python version drift.** Local is 3.10.20; the dev site's CI runs 3.12. Code will run on
-both and CI pins 3.12 (Render's default), but matching the two is safer long-term.
 
 **Resend needs a verified domain.** Sending as `booking@twinbrooksband.com` requires
 owning and verifying that domain with Resend. Until then it falls back to Resend's
