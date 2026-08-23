@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+addopts = "-v --cov=app --cov-report=term-missing --cov-fail-under=85"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 100

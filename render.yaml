@@ -1,0 +1,30 @@
+# Render blueprint. Deployment is deferred — this is here so the settings are
+# recorded and reviewable. To deploy: Render dashboard -> New -> Blueprint,
+# point it at this repo, then fill in the values marked sync: false.
+services:
+  - type: web
+    name: twinbrooks-band-website
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:app
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+
+      # Without this the app runs in debug mode and skips static caching.
+      - key: FLASK_ENV
+        value: production
+
+      - key: SECRET_KEY
+        generateValue: true
+
+      # Set in the Render dashboard, not committed here.
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_RECIPIENT
+        sync: false
+      - key: MAIL_FROM
+        sync: false

@@ -1,0 +1,19 @@
+{# Shared by the homepage preview and the full shows page. #}
+<article class="show {% if past %}show--past{% endif %}">
+  <div class="show__date">
+    <div class="show__month">{{ show.date.strftime('%b') }}</div>
+    <div class="show__day">{{ show.date.day }}</div>
+    <div class="show__year">{{ show.date.year }}</div>
+  </div>
+  <div>
+    <div class="show__venue">{{ show.venue }}</div>
+    <div class="show__meta">{{ show.city }} &middot; {{ show.time }}</div>
+    {% if show.note %}<span class="show__note">{{ show.note }}</span>{% endif %}
+  </div>
+  {% if show.ticket_url and not past %}
+    <div class="show__action">
+      <a class="btn btn--sm" href="{{ show.ticket_url }}"
+         target="_blank" rel="noopener noreferrer">Tickets</a>
+    </div>
+  {% endif %}
+</article>

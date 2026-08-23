@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Meet the Members — {{ band.name }}{% endblock %}
+{% block description %}The musicians behind {{ band.name }}.{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">The lineup</p>
+      <h2>Meet the Members</h2>
+    </div>
+    <div class="grid grid--4">
+      {% for member in members %}
+        <article class="member">
+          {% if asset_exists(member.photo) %}
+            <img class="member__photo" loading="lazy"
+                 src="{{ url_for('static', filename='assets/' ~ member.photo) }}"
+                 alt="{{ member.name }}, {{ member.instrument }}">
+          {% else %}
+            {# Photo not added yet — initials keep the grid intact. #}
+            <div class="member__initials" aria-hidden="true">
+              {{ member.name.split() | map('first') | join }}
+            </div>
+          {% endif %}
+          <div class="member__body">
+            <h3 class="member__name">{{ member.name }}</h3>
+            <div class="member__role">{{ member.instrument }}</div>
+            <p class="member__bio">{{ member.bio }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

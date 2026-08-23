@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Upcoming Shows — {{ band.name }}{% endblock %}
+{% block description %}Where to catch {{ band.name }} live.{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">On the calendar</p>
+      <h2>Upcoming Shows</h2>
+    </div>
+    {% for show in upcoming_shows %}
+      {% include "partials/show_card.html" %}
+    {% else %}
+      <div class="empty">
+        <p>No public shows on the books right now.</p>
+        <a class="btn btn--sm" href="{{ url_for('main.book') }}">Book us for your event</a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if past_shows %}
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section__intro">
+      <p class="section__eyebrow">Where we have been</p>
+      <h2>Past Shows</h2>
+    </div>
+    {% for show in past_shows %}
+      {% with past = True %}{% include "partials/show_card.html" %}{% endwith %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+<section class="section" id="who-we-are">
+  <div class="wrap">
+    <p class="section__eyebrow">About the band</p>
+    <h2>{{ band.who_we_are.heading }}</h2>
+    <div class="prose">
+      {% for paragraph in band.who_we_are.paragraphs %}
+        <p>{{ paragraph }}</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found — {{ band.name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="wrap" style="text-align:center">
+    <p class="section__eyebrow">404</p>
+    <h1>Page Not Found</h1>
+    <p class="contact__aside">That page does not exist — but the band still does.</p>
+    <p style="margin-top:1.5rem">
+      <a class="btn" href="{{ url_for('main.index') }}">Back to the homepage</a>
+      <a class="btn btn--ghost" href="{{ url_for('main.shows') }}">See upcoming shows</a>
+    </p>
+  </div>
+</section>
+{% endblock %}
