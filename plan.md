@@ -238,9 +238,10 @@ values, swapping placeholders for real content is checked automatically. Needed:
       number exist, so both keys are optional now rather than invented.
 - [x] YouTube links for the Videos tab → `videos.yaml` — all four embeds
 - [x] Band photos and the hero clip → `app/static/assets/`. The clip is the
-      band's own landing-page loop, 39.8 MB at source, re-encoded to 1.8 MB with
-      macOS `avconvert` (no ffmpeg on the build machine). The README's ffmpeg
-      recipe would do better if ffmpeg is ever installed.
+      band's own landing-page loop: 1920x1080 and 39.8 MB at source, shipped at
+      1280x720 / CRF 30 / no audio, 2.6 MB. An earlier `avconvert` pass got it to
+      1.8 MB but only at 568x320, which was visibly soft stretched across the
+      hero — the extra 0.7 MB buys back the resolution.
 - [ ] A logo — the live site sets the wordmark in type, so there is no image to take
 
 Then the Render deploy: create the Blueprint from `render.yaml`, fill the three

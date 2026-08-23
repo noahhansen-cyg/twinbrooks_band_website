@@ -217,7 +217,11 @@ p { margin: 0 0 1rem; }
 
 .hero {
   position: relative;
-  min-height: min(88vh, 720px);
+  /* Fills the screen exactly on load: viewport height less the sticky banner.
+     dvh second so mobile browsers measure against the collapsed URL bar
+     rather than leaving the bottom of the hero under it. */
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100dvh - var(--header-h));
   display: grid; align-items: center;
   overflow: hidden;
   background:
@@ -237,7 +241,9 @@ p { margin: 0 0 1rem; }
    performance still is never reliably light enough to read dark text against. */
 .hero__scrim {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(252,250,246,0) 55%, var(--bg) 100%);
+  /* No fade into the page — the hero ends on a clean edge. Kept as an element
+     because media mode still needs it to darken the clip. */
+  background: none;
 }
 
 /* Dark base under the clip: if the video 404s or is still loading, the light
@@ -246,7 +252,7 @@ p { margin: 0 0 1rem; }
   background: linear-gradient(150deg, #2b1e15 0%, #1a120c 60%, #2f2118 100%);
 }
 .hero--media .hero__scrim {
-  background: linear-gradient(180deg, rgba(28,20,14,0.45) 0%, rgba(28,20,14,0.62) 55%, var(--bg) 100%);
+  background: linear-gradient(180deg, rgba(28,20,14,0.45) 0%, rgba(28,20,14,0.62) 100%);
 }
 .hero--media .hero__title { color: #fff; }
 .hero--media .hero__sub { color: rgba(255, 255, 255, 0.86); }

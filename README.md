@@ -123,12 +123,15 @@ Grab the ID from the YouTube URL (`youtube.com/watch?v=`**`dQw4w9WgXcQ`**) and a
 ### Replacing the hero video
 
 The homepage hero is a short, **silent, looping** clip — think moving wallpaper, not a
-performance video. Keep it under ~2 MB. To convert a raw clip:
+performance video. Aim for under ~3 MB at 1280px wide; dropping the resolution to hit a
+smaller number reads as blurry once it is stretched full-bleed. To convert a raw clip:
 
 ```bash
-# 8-second silent loop starting at 0:12, scaled to 1280px wide
-ffmpeg -ss 00:00:12 -t 8 -i raw.mov -an -vf scale=1280:-2 \
-       -c:v libx264 -crf 28 -preset slow -movflags +faststart \
+# Silent loop scaled to 1280px wide — the settings the current hero.mp4 uses.
+# Add -ss 00:00:12 -t 8 before -i to cut a shorter section out of a long clip.
+ffmpeg -i raw.mov -an -vf scale=1280:-2 \
+       -c:v libx264 -profile:v high -crf 30 -preset slow -pix_fmt yuv420p \
+       -movflags +faststart \
        app/static/assets/hero.mp4
 
 # smaller WebM version browsers prefer when they support it
