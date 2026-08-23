@@ -225,16 +225,23 @@ Everything ships with realistic placeholder YAML so the site runs end-to-end fro
 then real content replaces it. Because `test_data.py` validates the shape rather than the
 values, swapping placeholders for real content is checked automatically. Needed:
 
-- [ ] Band name, tagline, hero heading/subheading, and the "who are we" copy → `band.yaml`
+- [x] Band name, tagline, hero heading/subheading, and the "who are we" copy → `band.yaml`
 - [x] Members: name, instrument, short bio, photo → `members.yaml` — all six, scraped
       from twinbrooks.band/the-members; photos in `app/static/assets/members/`
-- [ ] Shows: date, venue, city, set time, ticket link → `shows.yaml`
-- [ ] Services and "what sets us apart" — in our own words → `services.yaml`,
-      `differentiators.yaml`
-- [ ] Instagram + Facebook URLs, booking email, phone → `links.yaml`
-- [ ] YouTube links for the Videos tab → `videos.yaml`
-- [ ] Logo, band photos, the hero clip (raw is fine — it gets compressed) →
-      `app/static/assets/`; see the ffmpeg recipe in the README
+- [x] Shows: date, venue, city, set time, ticket link → `shows.yaml` — the three
+      dates the live site lists; it gives no set times, and no city but Reston
+- [~] Services and "what sets us apart" — in our own words → `services.yaml`,
+      `differentiators.yaml`. The live site names four event types but carries no
+      copy for them, so the descriptions are assembled from the band's own
+      sentences and member credentials. Still wants a pass in their voice.
+- [x] Instagram + booking email → `links.yaml`. No Facebook page and no phone
+      number exist, so both keys are optional now rather than invented.
+- [x] YouTube links for the Videos tab → `videos.yaml` — all four embeds
+- [x] Band photos and the hero clip → `app/static/assets/`. The clip is the
+      band's own landing-page loop, 39.8 MB at source, re-encoded to 1.8 MB with
+      macOS `avconvert` (no ffmpeg on the build machine). The README's ffmpeg
+      recipe would do better if ffmpeg is ever installed.
+- [ ] A logo — the live site sets the wordmark in type, so there is no image to take
 
 Then the Render deploy: create the Blueprint from `render.yaml`, fill the three
 `sync: false` env vars, and set the `SITE_URL` repository variable to arm keep-alive.

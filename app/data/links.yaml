@@ -1,5 +1,6 @@
-# PLACEHOLDER CONTENT — replace with the real accounts (Phase 5).
-instagram: https://www.instagram.com/twinbrooksband
-facebook: https://www.facebook.com/twinbrooksband
-email: booking@twinbrooksband.com
-phone: "(555) 123-4567"
+# From twinbrooks.band. The site lists Instagram and an email address only —
+# no Facebook page and no phone number, so both keys are omitted. Add either one
+# and it appears automatically: facebook puts the icon back in the nav and
+# footer, phone adds a "Or call ..." line under the contact and booking forms.
+instagram: https://www.instagram.com/twinbrooks06
+email: twinbrooks06@gmail.com

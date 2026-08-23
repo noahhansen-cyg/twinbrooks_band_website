@@ -17,15 +17,18 @@ def home(client):
 # --- Banner and socials -------------------------------------------------------
 
 def test_banner_links_to_both_socials(home, site_data):
+    """Facebook renders only when links.yaml configures one."""
     assert site_data["links"]["instagram"] in home
-    assert site_data["links"]["facebook"] in home
+    facebook = site_data["links"].get("facebook")
+    assert (facebook in home) if facebook else ("on Facebook" not in home)
 
 
 def test_social_links_are_labelled_for_screen_readers(home, site_data):
     """Label text follows band.name, so renaming the band is a YAML edit only."""
     name = escape(site_data["band"]["name"])
     assert 'aria-label="%s on Instagram"' % name in home
-    assert 'aria-label="%s on Facebook"' % name in home
+    if site_data["links"].get("facebook"):
+        assert 'aria-label="%s on Facebook"' % name in home
 
 
 def test_social_links_open_safely_in_a_new_tab(home):
@@ -33,10 +36,11 @@ def test_social_links_open_safely_in_a_new_tab(home):
     assert home.count('rel="noopener noreferrer"') >= 2
 
 
-def test_socials_are_inline_svg_not_images(home):
+def test_socials_are_inline_svg_not_images(home, site_data):
     assert "<svg" in home
     assert "<title>Instagram</title>" in home
-    assert "<title>Facebook</title>" in home
+    if site_data["links"].get("facebook"):
+        assert "<title>Facebook</title>" in home
 
 
 @pytest.mark.parametrize("path,label", [
@@ -68,10 +72,17 @@ def test_hero_renders_band_copy(home, site_data):
     assert site_data["band"]["tagline"] in home
 
 
-def test_hero_falls_back_to_gradient_when_no_clip_is_present(home):
-    """No hero.mp4 yet — the section must render without a broken <video>."""
-    assert "hero__scrim" in home
-    assert "<video" not in home
+def test_hero_falls_back_to_gradient_when_no_clip_is_present(app, client, monkeypatch):
+    """With no clip on disk the section must render without a broken <video>.
+
+    Forced rather than inferred from the assets folder, so adding or replacing
+    hero.mp4 never flips this test.
+    """
+    monkeypatch.setitem(app.jinja_env.globals, "asset_exists", lambda p: False)
+    body = client.get("/").data.decode()
+    assert "hero__scrim" in body
+    assert "<video" not in body
+    assert "hero--media" not in body
 
 
 def test_hero_video_renders_when_the_clip_exists(app, client, monkeypatch):
@@ -95,10 +106,17 @@ def test_hero_omits_poster_when_no_still_exists(app, client, monkeypatch):
 # --- Homepage sections --------------------------------------------------------
 
 @pytest.mark.parametrize("heading", [
-    "Who We Are", "Upcoming Shows", "What Sets Us Apart", "Our Services", "Get In Touch",
+    "Upcoming Shows", "What Sets Us Apart", "Our Services",
 ])
 def test_homepage_has_every_section(home, heading):
+    """The headings that live in the templates rather than in band.yaml."""
     assert heading in home
+
+
+@pytest.mark.parametrize("section", ["who_we_are", "contact"])
+def test_homepage_renders_the_editable_section_headings(home, site_data, section):
+    """These two come from band.yaml, so assert the data, not a fixed string."""
+    assert str(escape(site_data["band"][section]["heading"])) in home
 
 
 def test_homepage_renders_the_bio_paragraphs(home, site_data):

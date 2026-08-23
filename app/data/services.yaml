@@ -1,22 +1,26 @@
-# PLACEHOLDER CONTENT — replace with real service descriptions (Phase 5).
+# The four event types the band names on twinbrooks.band/contact ("weddings and
+# corporate gatherings to private parties and live venues").
+#
+# NOTE: the live site gives no per-service copy, so each description below is
+# assembled from the band's own sentences elsewhere on the site and from the
+# member bios. Replace them with your own words when you have them.
 - name: Weddings
   description: >
-    Ceremony, cocktail hour, and reception covered end to end. We handle the
-    first dance, the parent dances, and the announcements, and we work from your
-    timeline so nothing gets missed.
+    60s soul, 80s rock, and 2000s pop, played live — the energy, entertainment,
+    and music your guests will be talking about long after the last song.
 
-- name: Corporate Events
+- name: Corporate Gatherings
   description: >
-    Background music during dinner and a full dance set afterward, scaled to the
-    room. We can play as a trio for smaller spaces or the full band for a
-    ballroom.
+    A multi-genre set that reads the room, from background music over dinner to
+    a full dance floor once the night opens up.
 
 - name: Private Parties
   description: >
-    Birthdays, anniversaries, and holiday parties. Tell us the occasion and the
-    crowd and we will build a set around it.
+    From weddings to happy hours and everything in between. Tell us the
+    occasion and we will build the night around it.
 
-- name: Festivals & Venues
+- name: Live Venues
   description: >
-    A high-energy original-and-covers set for public shows, with our own PA and
-    lighting if the venue does not provide them.
+    A full live show for bars, breweries, and festivals — the band has played
+    Farm Brew Live, Falls Church State Theater, Cherry Blossom Festival, and
+    the GMU Patriot Center.

@@ -76,6 +76,10 @@ deploy.
 | `differentiators.yaml` | The "What Sets Us Apart" section |
 | `links.yaml` | Social links, booking email, phone |
 
+`links.yaml` needs `instagram` and `email`. `facebook` and `phone` are optional —
+add either key and it appears on its own (the Facebook icon in the nav and footer, the
+phone on the contact and booking forms).
+
 ### Adding a show
 
 Append an entry to `app/data/shows.yaml`:
@@ -83,11 +87,13 @@ Append an entry to `app/data/shows.yaml`:
 ```yaml
 - date: 2026-09-12          # YYYY-MM-DD — must be a real date, CI checks this
   venue: The Bluebird
-  city: Nashville, TN
-  time: "8:00 PM"           # quote it, or YAML reads it as a number
-  ticket_url: https://example.com/tickets
+  city: Nashville, TN       # optional
+  time: "8:00 PM"           # optional — quote it, or YAML reads it as a number
+  ticket_url: https://example.com/tickets   # optional
   note: 21+                 # optional
 ```
+
+Only `date` and `venue` are required; the card leaves out whatever is missing.
 
 Shows are sorted by date automatically, and anything in the past drops off the Upcoming
 list on its own — no cleanup needed.
