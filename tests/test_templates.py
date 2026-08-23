@@ -21,9 +21,11 @@ def test_banner_links_to_both_socials(home, site_data):
     assert site_data["links"]["facebook"] in home
 
 
-def test_social_links_are_labelled_for_screen_readers(home):
-    assert 'aria-label="Twin Brooks on Instagram"' in home
-    assert 'aria-label="Twin Brooks on Facebook"' in home
+def test_social_links_are_labelled_for_screen_readers(home, site_data):
+    """Label text follows band.name, so renaming the band is a YAML edit only."""
+    name = escape(site_data["band"]["name"])
+    assert 'aria-label="%s on Instagram"' % name in home
+    assert 'aria-label="%s on Facebook"' % name in home
 
 
 def test_social_links_open_safely_in_a_new_tab(home):
@@ -155,14 +157,24 @@ def test_empty_state_when_nothing_is_scheduled(app, client):
 def test_members_page_lists_everyone(client, site_data):
     body = client.get("/members").data.decode()
     for member in site_data["members"]:
-        assert member["name"] in body
-        assert member["instrument"] in body
+        assert str(escape(member["name"])) in body
+        # Escaped: a role like "Lead Guitar / Sound & Lights" renders as &amp;.
+        assert str(escape(member["instrument"])) in body
 
 
-def test_members_fall_back_to_initials_without_a_photo(client):
+def test_members_fall_back_to_initials_without_a_photo(app, client, site_data, monkeypatch):
+    """Every member has a photo today, so force the missing-file case.
+
+    Asserting on the real asset folder would make this test flip whenever a
+    photo is added or removed; the fallback itself is what needs guarding.
+    """
+    monkeypatch.setitem(app.jinja_env.globals, "asset_exists", lambda p: False)
     body = client.get("/members").data.decode()
     assert "member__initials" in body
-    assert "AR" in body  # Alex Rivera
+    assert "member__photo" not in body
+    for member in site_data["members"]:
+        initials = "".join(word[0] for word in member["name"].split()[:2]).upper()
+        assert initials in body
 
 
 def test_member_photo_is_used_when_present(app, client, monkeypatch):

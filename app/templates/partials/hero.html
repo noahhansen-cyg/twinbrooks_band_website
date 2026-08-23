@@ -1,7 +1,7 @@
 {# Silent looping background clip — GIF-like, at a fraction of the bandwidth.
    Falls back to the gradient in .hero until hero.mp4 is dropped in (Phase 5). #}
 {% set has_video = asset_exists('hero.mp4') or asset_exists('hero.webm') %}
-<section class="hero">
+<section class="hero{% if has_video %} hero--media{% endif %}">
   {% if has_video %}
     <video class="hero__video" muted autoplay loop playsinline preload="metadata"
            {% if asset_exists('hero.jpg') %}poster="{{ url_for('static', filename='assets/hero.jpg') }}"{% endif %}>

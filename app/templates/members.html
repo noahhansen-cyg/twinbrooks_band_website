@@ -8,7 +8,8 @@
       <p class="section__eyebrow">The lineup</p>
       <h2>Meet the Members</h2>
     </div>
-    <div class="grid grid--4">
+    {# Six members: three columns lands two even rows instead of a 4 + 2 orphan. #}
+    <div class="grid grid--3">
       {% for member in members %}
         <article class="member">
           {% if asset_exists(member.photo) %}

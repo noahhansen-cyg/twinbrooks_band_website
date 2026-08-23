@@ -1,21 +1,35 @@
 /* ==========================================================================
-   Twin Brooks — mobile-first stylesheet.
+   Twinbrooks — mobile-first stylesheet.
    Palette lives in :root; changing the band's colors is a one-block edit.
    ========================================================================== */
 
 :root {
-  --bg:            #0e1014;
-  --bg-alt:        #14171e;
-  --surface:       #1a1e27;
-  --surface-hover: #222736;
-  --border:        #2a3040;
+  color-scheme: light;
 
-  --text:          #f4f6fa;
-  --muted:         #9aa4b8;
+  --bg:            #fcfaf6;
+  --bg-alt:        #f4efe6;
+  --surface:       #ffffff;
+  --surface-hover: #faf6ef;
+  --border:        #e6dccb;
+  --border-strong: #d6c9b2;
 
-  --accent:        #d9a441;
-  --accent-hover:  #eab958;
-  --accent-ink:    #1a1206;
+  --text:          #241f1a;
+  --muted:         #61594e;
+
+  /* Rust reads as warm and live-music-ish while still clearing AA both as link
+     text on the page (5.1:1) and as a button fill under white (5.3:1). Gold,
+     the old accent, cannot do either on a light background. */
+  --accent:        #b8461a;
+  --accent-hover:  #96350f;
+  --accent-ink:    #ffffff;
+  --accent-soft:   #fbeee4;
+
+  --danger:        #b3261e;
+  --success:       #1f6b45;
+
+  /* Light layouts need elevation where a dark one used contrast alone. */
+  --shadow-sm: 0 1px 2px rgba(60, 42, 26, 0.06), 0 2px 8px rgba(60, 42, 26, 0.05);
+  --shadow-md: 0 6px 20px rgba(60, 42, 26, 0.10);
 
   --font-display: "Oswald", "Helvetica Neue", Impact, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -106,8 +120,8 @@ p { margin: 0 0 1rem; }
 .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--accent-ink); }
 .btn:active { transform: translateY(1px); }
 
-.btn--ghost { background: transparent; color: var(--text); border-color: var(--border); }
-.btn--ghost:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+.btn--ghost { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+.btn--ghost:hover { background: var(--accent-soft); color: var(--accent-hover); border-color: var(--accent); }
 
 .btn--sm { padding: 0.5rem 1.1rem; font-size: 0.82rem; }
 
@@ -115,7 +129,7 @@ p { margin: 0 0 1rem; }
 
 .banner {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(14, 16, 20, 0.94);
+  background: rgba(252, 250, 246, 0.88);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -163,6 +177,7 @@ p { margin: 0 0 1rem; }
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 .socials__link:hover { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+.socials__link { background: var(--surface); }
 .socials__link svg { width: 18px; height: 18px; fill: currentColor; }
 
 .nav-toggle {
@@ -176,16 +191,20 @@ p { margin: 0 0 1rem; }
   display: block; width: 20px; height: 2px; background: currentColor;
   margin: 4px auto; transition: transform 0.2s ease, opacity 0.2s ease;
 }
-.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+/* 10px, not 6px: the bars are grid rows 10px apart (2px bar + 4px margins),
+   so a 6px shift left them short of centre and the "close" icon read as a
+   chevron rather than an X. */
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) { transform: translateY(10px) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) { opacity: 0; }
-.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
 
 @media (max-width: 860px) {
   .nav-toggle { display: grid; }
   .nav {
     position: absolute; left: 0; right: 0; top: 100%;
-    background: var(--bg-alt);
+    background: var(--surface);
     border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
     display: none;
   }
   .nav.is-open { display: block; }
@@ -201,7 +220,10 @@ p { margin: 0 0 1rem; }
   min-height: min(88vh, 720px);
   display: grid; align-items: center;
   overflow: hidden;
-  background: linear-gradient(150deg, #171b24 0%, #0e1014 55%, #1d2230 100%);
+  background:
+    radial-gradient(65% 55% at 82% 12%, rgba(184, 70, 26, 0.17) 0%, transparent 72%),
+    radial-gradient(55% 60% at 8% 88%, rgba(212, 160, 60, 0.20) 0%, transparent 70%),
+    linear-gradient(150deg, #fff6ea 0%, #f9ecdc 45%, #f2dcc6 100%);
 }
 
 .hero__video {
@@ -210,12 +232,35 @@ p { margin: 0 0 1rem; }
   object-fit: cover;
 }
 
+/* Two hero modes. Without a clip the section is a bright gradient with dark
+   type; with one, the media needs a dark scrim and light type over it, since a
+   performance still is never reliably light enough to read dark text against. */
 .hero__scrim {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(14,16,20,0.55) 0%, rgba(14,16,20,0.75) 60%, var(--bg) 100%);
+  background: linear-gradient(180deg, rgba(252,250,246,0) 55%, var(--bg) 100%);
 }
 
-.hero__content { position: relative; padding: 5rem 0; max-width: 46rem; }
+/* Dark base under the clip: if the video 404s or is still loading, the light
+   type below must not land on the cream gradient. */
+.hero--media {
+  background: linear-gradient(150deg, #2b1e15 0%, #1a120c 60%, #2f2118 100%);
+}
+.hero--media .hero__scrim {
+  background: linear-gradient(180deg, rgba(28,20,14,0.45) 0%, rgba(28,20,14,0.62) 55%, var(--bg) 100%);
+}
+.hero--media .hero__title { color: #fff; }
+.hero--media .hero__sub { color: rgba(255, 255, 255, 0.86); }
+.hero--media .hero__tagline { color: #f6c99a; }
+.hero--media .btn--ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.hero--media .btn--ghost:hover { background: rgba(255, 255, 255, 0.2); color: #fff; border-color: #fff; }
+
+/* padding-block, not padding: the shorthand was zeroing out .wrap's side
+   padding, so the hero copy sat flush against the edge on phones. */
+.hero__content { position: relative; padding-block: 5rem; max-width: 46rem; }
 .hero__title { margin-bottom: 0.75rem; }
 .hero__tagline {
   font-family: var(--font-display);
@@ -242,6 +287,7 @@ p { margin: 0 0 1rem; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
 }
 .card__num {
   font-family: var(--font-display);
@@ -263,6 +309,7 @@ p { margin: 0 0 1rem; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
 }
 .show + .show { margin-top: 0.85rem; }
 
@@ -271,8 +318,8 @@ p { margin: 0 0 1rem; }
   min-width: 72px;
   padding: 0.5rem 0.65rem;
   border-radius: 8px;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  border: 1px solid #f0d9c6;
 }
 .show__month {
   font-family: var(--font-display);
@@ -290,7 +337,7 @@ p { margin: 0 0 1rem; }
 }
 .show__action { grid-column: 1 / -1; }
 
-.show--past { opacity: 0.65; }
+.show--past { opacity: 0.72; box-shadow: none; }
 
 @media (min-width: 620px) {
   .show { grid-template-columns: auto 1fr auto; }
@@ -298,19 +345,22 @@ p { margin: 0 0 1rem; }
 }
 
 .empty {
-  border: 1px dashed var(--border);
+  border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
   padding: 2rem; text-align: center; color: var(--muted);
 }
 
 /* --- Members -------------------------------------------------------------- */
 
-.member { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.member {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
+}
 .member__photo { aspect-ratio: 4 / 5; width: 100%; object-fit: cover; background: var(--bg-alt); }
 .member__initials {
   aspect-ratio: 4 / 5;
   display: grid; place-items: center;
-  background: linear-gradient(140deg, var(--surface-hover), var(--bg-alt));
+  background: linear-gradient(140deg, #fdf1e6, var(--bg-alt));
   font-family: var(--font-display); font-size: 2.5rem; color: var(--accent); letter-spacing: 0.1em;
 }
 .member__body { padding: 1.25rem 1.5rem 1.75rem; }
@@ -327,6 +377,7 @@ p { margin: 0 0 1rem; }
   position: relative; aspect-ratio: 16 / 9;
   border-radius: var(--radius); overflow: hidden;
   border: 1px solid var(--border); background: var(--bg-alt);
+  box-shadow: var(--shadow-sm);
 }
 .video__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .video__title { margin: 1rem 0 0.25rem; }
@@ -346,23 +397,26 @@ p { margin: 0 0 1rem; }
 .field input, .field textarea, .field select {
   width: 100%;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 8px;
   color: var(--text);
   font: inherit;
   padding: 0.75rem 0.9rem;
 }
 .field input:focus, .field textarea:focus, .field select:focus {
-  border-color: var(--accent); outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(184, 70, 26, 0.15);
+  outline: none;
 }
+.field input::placeholder, .field textarea::placeholder { color: #9a9086; }
 .field textarea { min-height: 150px; resize: vertical; }
 .field--optional .field__label::after {
-  content: " optional"; color: var(--border); letter-spacing: 0.06em;
+  content: " optional"; color: var(--muted); opacity: 0.75; letter-spacing: 0.06em;
 }
 
 .form__status { margin: 0; font-size: 0.95rem; min-height: 1.5rem; }
-.form__status.is-error { color: #ff8f8f; }
-.form__status.is-success { color: var(--accent); }
+.form__status.is-error { color: var(--danger); }
+.form__status.is-success { color: var(--success); }
 
 .contact__aside { color: var(--muted); }
 .contact__aside a { display: inline-block; }
