@@ -7,7 +7,10 @@
   </div>
   <div>
     <div class="show__venue">{{ show.venue }}</div>
-    <div class="show__meta">{{ show.city }} &middot; {{ show.time }}</div>
+    {# The calendar often lists a venue and nothing else — skip the line
+       rather than render a stray separator. #}
+    {% set meta = [show.city, show.time] | select | list %}
+    {% if meta %}<div class="show__meta">{{ meta | join(' · ') }}</div>{% endif %}
     {% if show.note %}<span class="show__note">{{ show.note }}</span>{% endif %}
   </div>
   {% if show.ticket_url and not past %}

@@ -47,14 +47,17 @@ def test_band_sections_have_headings_and_body(data):
 # --- links.yaml --------------------------------------------------------------
 
 def test_social_links_are_https_urls(data):
+    """Instagram is required; facebook is optional — the band has no page."""
     links = data["links"]
     assert URL_RE.match(links["instagram"])
-    assert URL_RE.match(links["facebook"])
+    if links.get("facebook"):
+        assert URL_RE.match(links["facebook"])
 
 
 def test_links_point_at_the_right_platforms(data):
     assert "instagram.com" in data["links"]["instagram"]
-    assert "facebook.com" in data["links"]["facebook"]
+    if data["links"].get("facebook"):
+        assert "facebook.com" in data["links"]["facebook"]
 
 
 def test_booking_email_is_well_formed(data):
@@ -73,8 +76,9 @@ def test_members_have_required_fields(data):
 # --- shows.yaml --------------------------------------------------------------
 
 def test_shows_have_required_fields(data):
+    """City and set time are optional — the calendar often lists neither."""
     for show in data["shows"]:
-        for key in ("date", "venue", "city", "time"):
+        for key in ("date", "venue"):
             assert show.get(key), f"show at {show.get('venue')!r} is missing {key}"
 
 
@@ -89,9 +93,10 @@ def test_show_dates_parse_as_real_dates(data):
 def test_show_times_are_strings(data):
     """Unquoted times like 8:00 are parsed as sexagesimal numbers by YAML."""
     for show in data["shows"]:
-        assert isinstance(show["time"], str), (
-            f"{show['venue']}: quote the time value in shows.yaml"
-        )
+        if "time" in show:
+            assert isinstance(show["time"], str), (
+                f"{show['venue']}: quote the time value in shows.yaml"
+            )
 
 
 def test_show_ticket_urls_are_valid_when_present(data):

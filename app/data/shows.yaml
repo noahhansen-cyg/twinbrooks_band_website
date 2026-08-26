@@ -1,38 +1,15 @@
-# PLACEHOLDER CONTENT — replace with the real calendar (Phase 5).
-# date must be YYYY-MM-DD. Quote `time`, or YAML reads it as a number.
+# From the Upcoming Shows page on twinbrooks.band, which lists dates and venues
+# only — no set times or cities, so those keys are omitted here. Add `time:`
+# (quoted) and `city:` to any entry and the card fills them in.
+#
 # Past dates drop off the Upcoming list automatically — no cleanup needed.
-- date: 2026-09-12
-  venue: The Bluebird
-  city: Nashville, TN
-  time: "8:00 PM"
-  ticket_url: https://example.com/tickets/bluebird
-  note: 21+
+- date: 2026-06-20
+  venue: Harbour Grille
 
-- date: 2026-10-03
-  venue: Riverside Amphitheater
-  city: Chattanooga, TN
-  time: "7:30 PM"
-  ticket_url: https://example.com/tickets/riverside
+- date: 2026-07-04
+  venue: Private Event
+  note: Not a public show
 
-- date: 2026-11-21
-  venue: The Grand Hall
-  city: Knoxville, TN
-  time: "9:00 PM"
-  note: Private event — not ticketed
-
-- date: 2026-12-31
-  venue: Union Station Hotel
-  city: Nashville, TN
-  time: "10:00 PM"
-  ticket_url: https://example.com/tickets/nye
-  note: New Year's Eve
-
-- date: 2026-06-14
-  venue: Summer Street Festival
-  city: Franklin, TN
-  time: "6:00 PM"
-
-- date: 2026-04-05
-  venue: The Basement East
-  city: Nashville, TN
-  time: "8:30 PM"
+- date: 2026-07-18
+  venue: Crafthouse Reston
+  city: Reston, VA
