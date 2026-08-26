@@ -379,6 +379,11 @@ p { margin: 0 0 1rem; }
 
 /* --- Videos --------------------------------------------------------------- */
 
+/* Videos want to stay a true 2-up: auto-fit would slip to 3-4 columns on wide
+   screens and shrink the thumbnails, which is the opposite of the point. */
+.grid--videos { grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 760px) { .grid--videos { grid-template-columns: repeat(2, 1fr); } }
+
 .video__frame {
   position: relative; aspect-ratio: 16 / 9;
   border-radius: var(--radius); overflow: hidden;
